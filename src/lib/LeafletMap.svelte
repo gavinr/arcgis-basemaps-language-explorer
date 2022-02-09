@@ -24,14 +24,11 @@
     map.on("moveend", (evt) => {
       console.log("moveEnd");
       if (JSON.stringify(center) !== JSON.stringify(map.getCenter())) {
-        console.log("setting center");
         center = map.getCenter();
       }
       if (zoom !== map.getZoom()) {
-        console.log("setting zoom");
         zoom = map.getZoom();
       }
-      // console.log("center", center);
     });
   };
 
