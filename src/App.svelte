@@ -5,7 +5,7 @@
 
   let center;
   let zoom;
-  let selectedStyle;
+  let selectedStyle = "0320_Light_Gray_Canvas_Title";
   let langageDataJson: LangageDataJson;
 
   interface LangageDataJson {
@@ -23,7 +23,11 @@
   $: if (langageDataJsonInitial) {
     const clone = Object.assign({}, langageDataJsonInitial);
     Object.keys(clone.styles).forEach((key) => {
-      clone.styles[key].selected = false;
+      if (clone.styles[key].label == "Gray Canvas") {
+        clone.styles[key].selected = true;
+      } else {
+        clone.styles[key].selected = false;
+      }
     });
 
     langageDataJson = clone;
