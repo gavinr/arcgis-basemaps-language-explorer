@@ -1,0 +1,28 @@
+{
+  "styles": {
+    "640 _Colored_Pencil": {
+      "label": "Colored Pencil",
+      "thumbnail": "http://..."
+    },
+    "0401_NatGeo": {
+      "label": "National Geographic",
+      "thumbnail": "https://...."
+    }
+  },
+  "languages": {
+    "en": {
+      "label": "English",
+      "group_url": "http://.....",
+      "maps": {
+        "640 _Colored_Pencil": [
+          {},
+          {}
+        ],
+        "0401_NatGeo": [
+          {},
+          {}
+        ]
+      }
+    }
+  }
+}
