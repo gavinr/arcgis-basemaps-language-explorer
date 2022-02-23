@@ -2,7 +2,7 @@
 // to generate languageData.json
 import fetch from "node-fetch";
 import FormData from "isomorphic-form-data";
-import fs from 'fs';
+import fs from "fs";
 import arcgisRestRequest from "@esri/arcgis-rest-request";
 import {
   searchGroups,
@@ -122,7 +122,11 @@ const main = async () => {
       ).toFixed(1)}%`
     );
     // const languageLabel = await getCountryLabelFromUsername(groupInfo.owner);
-    languages[languageCode] = await getLanguageInfo(groupInfo);
+    languages[languageCode] = Object.assign(
+      {},
+      { id: languageCode },
+      await getLanguageInfo(groupInfo)
+    );
   }
   // console.log("languages:", languages);
 
@@ -132,9 +136,9 @@ const main = async () => {
     Object.keys(language.maps).forEach((styleName) => {
       if (NAME_LOOKUP.hasOwnProperty(styleName)) {
         const label = NAME_LOOKUP[styleName];
-        styles[styleName] = {label};
+        styles[styleName] = { id: styleName, label };
       } else {
-        console.log('could not find in NAME_LOOkUP:', styleName)
+        console.log("could not find in NAME_LOOkUP:", styleName);
       }
     });
   });
@@ -144,9 +148,8 @@ const main = async () => {
     styles,
     languages,
   };
-  fs.writeFileSync('languageData.json', JSON.stringify(objectToWrite, null, 2));
-  fs.writeFileSync('languageData.min.json', JSON.stringify(objectToWrite));
-
+  fs.writeFileSync("languageData.json", JSON.stringify(objectToWrite, null, 2));
+  fs.writeFileSync("languageData.min.json", JSON.stringify(objectToWrite));
 };
 
 main();
