@@ -8,7 +8,7 @@
   {#each Object.entries(styles) as [name, info]}
     <button
       class="btn"
-      class:btn-green={info.selected}
+      class:btn-green={name == selectedStyle}
       on:click={() => {
         Object.keys(styles).forEach((key) => {
           styles[key].selected = false;
@@ -16,7 +16,6 @@
 
         // Pass the selected style "up" to the parent compoennt:
         selectedStyle = name;
-        info.selected = true;
       }}>{info.label}</button
     >
   {/each}

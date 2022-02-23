@@ -4,10 +4,15 @@
   import { vectorTileLayer } from "esri-leaflet-vector";
   import "leaflet/dist/leaflet.css";
 
-  export let layersArray;
+  export let langageDataJson;
   export let center = { lat: 49, lng: 10 };
   export let zoom = 5;
-  export let language;
+  export let initialLanguage = "en";
+  export let selectedStyle;
+
+  let selectedLanguageCode = initialLanguage;
+  let selectedLanguage;
+
   let layerGroup;
   let map: LeafletMap;
 
@@ -28,11 +33,13 @@
     // }).addTo(map);
 
     map.on("moveend", (evt) => {
+      console.log("moveEnd", map.getCenter());
       if (JSON.stringify(center) !== JSON.stringify(map.getCenter())) {
         center = map.getCenter();
       }
       if (zoom !== map.getZoom()) {
         zoom = map.getZoom();
+        console.log("new zoom", zoom);
       }
     });
   };
@@ -57,8 +64,11 @@
     }
   };
 
-  $: if (map && layerGroup && layersArray && layersArray.length > 0) {
-    // console.log("layersArray", layersArray);
+  $: if (selectedLanguageCode && langageDataJson) {
+    selectedLanguage = langageDataJson.languages[selectedLanguageCode];
+  }
+
+  $: if (map && layerGroup && selectedLanguage && selectedStyle) {
     layerGroup.eachLayer((layer) => {
       // console.log("layer", layer);
       if (layer._mapboxGL) {
@@ -67,7 +77,9 @@
       }
     });
     layerGroup.clearLayers();
+
     // assume there are 2 layers for now
+    const layersArray = selectedLanguage.maps[selectedStyle];
     addLayer(layersArray[0]);
     setTimeout(() => {
       if (layersArray.length > 1) {
@@ -84,12 +96,13 @@
     map.setView(center);
   }
   $: if (map && zoom && zoom !== map.getZoom()) {
+    console.log("setting zoom", zoom);
     map.setZoom(zoom);
   }
 </script>
 
 <div class="wrapper">
-  <div class="font-size-4">{language}</div>
+  <div class="font-size-4">{selectedLanguage.label}</div>
   <div class="map" use:mapNode />
 </div>
 

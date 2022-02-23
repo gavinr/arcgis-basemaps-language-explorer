@@ -7,6 +7,7 @@
   let zoom;
   let selectedStyle = "0320_Light_Gray_Canvas_Title";
   let langageDataJson: LangageDataJson;
+  let initialLanguages = [];
 
   interface LangageDataJson {
     styles: { [key: string]: { label: string; selected?: boolean } };
@@ -21,16 +22,19 @@
   }
 
   $: if (langageDataJsonInitial) {
+    console.log("langageDataJsonInitial", langageDataJsonInitial);
     const clone = Object.assign({}, langageDataJsonInitial);
-    Object.keys(clone.styles).forEach((key) => {
-      if (clone.styles[key].label == "Gray Canvas") {
-        clone.styles[key].selected = true;
-      } else {
-        clone.styles[key].selected = false;
-      }
-    });
 
     langageDataJson = clone;
+    console.log("langageDataJson", langageDataJson);
+
+    const allLanguages = Object.keys(langageDataJson.languages);
+    console.log("allLanguages", JSON.stringify(allLanguages));
+    allLanguages.sort();
+    for (let i = 0; i < 6; i++) {
+      initialLanguages.push(allLanguages.pop());
+    }
+    console.log("initialLanguages", initialLanguages);
   }
 </script>
 
@@ -42,18 +46,17 @@
   </p>
 
   <div class="mapsWrapper">
-    {#each Object.values(langageDataJson.languages) as language, i}
-      {#if i < 6}
-        <!-- content here -->
-        <div class="mapWrapper">
-          <LeafletMap
-            bind:zoom
-            bind:center
-            language={language.label}
-            layersArray={language.maps[selectedStyle]}
-          />
-        </div>
-      {/if}
+    {#each initialLanguages as initialLanguage}
+      <!-- content here -->
+      <div class="mapWrapper">
+        <LeafletMap
+          bind:zoom
+          bind:center
+          {initialLanguage}
+          {langageDataJson}
+          {selectedStyle}
+        />
+      </div>
     {/each}
   </div>
 
