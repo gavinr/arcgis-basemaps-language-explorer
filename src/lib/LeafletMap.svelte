@@ -14,6 +14,8 @@
   };
   export let selectedStyle;
 
+  let triggerMoveEnd = true;
+
   let sortedLanguages: LanguageInfo[];
 
   let selectedLanguageCode: string = initialLanguage.id;
@@ -39,11 +41,15 @@
     // }).addTo(map);
 
     map.on("moveend", (evt) => {
-      if (JSON.stringify(center) !== JSON.stringify(map.getCenter())) {
-        center = map.getCenter();
-      }
-      if (zoom !== map.getZoom()) {
-        zoom = map.getZoom();
+      if (triggerMoveEnd === true) {
+        if (JSON.stringify(center) !== JSON.stringify(map.getCenter())) {
+          center = map.getCenter();
+        }
+        if (zoom !== map.getZoom()) {
+          zoom = map.getZoom();
+        }
+      } else {
+        triggerMoveEnd = true;
       }
     });
   };
@@ -105,9 +111,11 @@
     center &&
     JSON.stringify(center) !== JSON.stringify(map.getCenter())
   ) {
+    triggerMoveEnd = false;
     map.setView(center);
   }
   $: if (map && zoom && zoom !== map.getZoom()) {
+    triggerMoveEnd = false;
     map.setZoom(zoom);
   }
 </script>
