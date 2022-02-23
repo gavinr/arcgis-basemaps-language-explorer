@@ -3,15 +3,21 @@
   import { dynamicMapLayer } from "esri-leaflet";
   import { vectorTileLayer } from "esri-leaflet-vector";
   import "leaflet/dist/leaflet.css";
+  import type { LanguageDataJson, LanguageInfo } from "../types";
 
-  export let langageDataJson;
+  export let langageDataJson: LanguageDataJson;
   export let center = { lat: 49, lng: 10 };
   export let zoom = 5;
-  export let initialLanguage = "en";
+  export let initialLanguage = {
+    id: "en",
+    label: "English",
+  };
   export let selectedStyle;
 
-  let selectedLanguageCode = initialLanguage;
-  let selectedLanguage;
+  let sortedLanguages: LanguageInfo[];
+
+  let selectedLanguageCode: string = initialLanguage.id;
+  let selectedLanguage: LanguageInfo;
 
   let layerGroup;
   let map: LeafletMap;
@@ -68,6 +74,14 @@
     selectedLanguage = langageDataJson.languages[selectedLanguageCode];
   }
 
+  $: if (langageDataJson) {
+    const allLanguages = Object.values(langageDataJson.languages);
+    allLanguages.sort((a, b) => {
+      return a.label < b.label ? -1 : 1;
+    });
+    sortedLanguages = allLanguages;
+  }
+
   $: if (map && layerGroup && selectedLanguage && selectedStyle) {
     layerGroup.eachLayer((layer) => {
       // console.log("layer", layer);
@@ -104,10 +118,8 @@
 <div class="wrapper">
   <div class="titleArea font-size-4">
     <select bind:value={selectedLanguageCode}>
-      {#each Object.keys(langageDataJson.languages) as languageCode}
-        <option value={languageCode}
-          >{langageDataJson.languages[languageCode].label}</option
-        >
+      {#each sortedLanguages as language}
+        <option value={language.id}>{language.label}</option>
       {/each}
     </select>
   </div>

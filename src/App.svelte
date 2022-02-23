@@ -3,23 +3,13 @@
   import Selector from "./lib/Selector.svelte";
   import langageDataJsonInitial from "../languageData.json";
 
+  import type { LanguageDataJson } from "./types";
+
   let center;
   let zoom;
   let selectedStyle = "0320_Light_Gray_Canvas_Title";
-  let langageDataJson: LangageDataJson;
+  let langageDataJson: LanguageDataJson;
   let initialLanguages = [];
-
-  interface LangageDataJson {
-    styles: { [key: string]: { label: string; selected?: boolean } };
-    languages: {
-      [key: string]: {
-        label: string;
-        group_id: string;
-        group_url: string;
-        maps: { [key: string]: any[] };
-      };
-    };
-  }
 
   $: if (langageDataJsonInitial) {
     console.log("langageDataJsonInitial", langageDataJsonInitial);
@@ -28,11 +18,14 @@
     langageDataJson = clone;
     console.log("langageDataJson", langageDataJson);
 
-    const allLanguages = Object.keys(langageDataJson.languages);
-    console.log("allLanguages", JSON.stringify(allLanguages));
-    allLanguages.sort();
+    const allLanguages = Object.values(langageDataJson.languages);
+    // console.log("allLanguages", JSON.stringify(allLanguages));
+    allLanguages.sort((a, b) => {
+      return a.label < b.label ? -1 : 1;
+    });
+
     for (let i = 0; i < 6; i++) {
-      initialLanguages.push(allLanguages.pop());
+      initialLanguages.push(allLanguages.shift());
     }
     console.log("initialLanguages", initialLanguages);
   }

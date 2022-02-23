@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let styles: { [key: string]: { label: string; selected?: boolean } } =
-    {};
+  import type { StyleInfo } from "../types";
+
+  export let styles: {
+    [key: string]: StyleInfo;
+  } = {};
+
   export let selectedStyle = "";
 </script>
 
