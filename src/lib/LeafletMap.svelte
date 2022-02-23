@@ -39,13 +39,11 @@
     // }).addTo(map);
 
     map.on("moveend", (evt) => {
-      console.log("moveEnd", map.getCenter());
       if (JSON.stringify(center) !== JSON.stringify(map.getCenter())) {
         center = map.getCenter();
       }
       if (zoom !== map.getZoom()) {
         zoom = map.getZoom();
-        console.log("new zoom", zoom);
       }
     });
   };
@@ -110,7 +108,6 @@
     map.setView(center);
   }
   $: if (map && zoom && zoom !== map.getZoom()) {
-    console.log("setting zoom", zoom);
     map.setZoom(zoom);
   }
 </script>

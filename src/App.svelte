@@ -12,11 +12,9 @@
   let initialLanguages = [];
 
   $: if (langageDataJsonInitial) {
-    console.log("langageDataJsonInitial", langageDataJsonInitial);
     const clone = Object.assign({}, langageDataJsonInitial);
 
     langageDataJson = clone;
-    console.log("langageDataJson", langageDataJson);
 
     const allLanguages = Object.values(langageDataJson.languages);
     // console.log("allLanguages", JSON.stringify(allLanguages));
@@ -27,7 +25,6 @@
     for (let i = 0; i < 6; i++) {
       initialLanguages.push(allLanguages.shift());
     }
-    console.log("initialLanguages", initialLanguages);
   }
 </script>
 
