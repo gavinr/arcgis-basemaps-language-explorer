@@ -102,7 +102,15 @@
 </script>
 
 <div class="wrapper">
-  <div class="font-size-4">{selectedLanguage.label}</div>
+  <div class="titleArea font-size-4">
+    <select bind:value={selectedLanguageCode}>
+      {#each Object.keys(langageDataJson.languages) as languageCode}
+        <option value={languageCode}
+          >{langageDataJson.languages[languageCode].label}</option
+        >
+      {/each}
+    </select>
+  </div>
   <div class="map" use:mapNode />
 </div>
 
@@ -117,5 +125,8 @@
     height: 100%;
     width: 100%;
     margin-bottom: 20px;
+  }
+  div.titleArea {
+    margin: 0 auto 10px;
   }
 </style>
